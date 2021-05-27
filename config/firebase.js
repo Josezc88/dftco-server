@@ -1,6 +1,8 @@
 
 const firebase = require('firebase');
+const util = require('util');
 
+const items = [];
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBU6mTd1nZ3oYOSwPBr8gBl43Vy_TizYJY",
@@ -13,33 +15,64 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
 const database = firebase.database();
 const firestore = firebase.firestore();
 console.log('Se configuro firebase');
 
-const getAllData = () => {
+const getFirebaseData = () => {
     database.ref().on('value', (snapshot)  => {
         const data = snapshot.val();
-        // console.log( data );
         Object.keys(data).forEach((key, index) => {
-            if (!key.endsWith(',') && (key.startsWith('S') || key.startsWith('M'))) {
-               const item = data[key];
-               Object.keys(item).forEach((value, i) => {
-                   console.log(value, sanitizate(item[value]));
-               });
-               console.log('================');
-            //    firestore.collection('Jerez').add(item);
+            if (!key.endsWith(',') && (key.startsWith('S') || key.startsWith('M') || key === 'R1010' || key === 'E1010')) {
+                const item = data[key];
+                const newItem = {};
+                Object.keys(item).forEach((value, i) => {
+                    newItem[value] = sanitizate(item[value]);
+                });
+
+                const clientId = (key === 'R1010' || key === 'E1010') ? 'Cargadero' : 'Jerez';
+                saveToFirestore(clientId, key, newItem);
             }
         });
     });
+}
+
+const saveToFirestore = (clientid, key, item) => {
+    const inArray = containsObject(item, items);
+    if (inArray) {        
+        return;
+    }
+    
+    firestore.collection(clientid)
+        .doc('data')
+        .collection(key)
+        .add(item)
+        .then(resp => {
+            items.push(item);
+        })
+        .catch(e => console.log(e));
 }
 
 const sanitizate = (value) => {
     return value.toString().replace(/\"/g, "").replace(/\\/g, "");
 }
 
+const containsObject = (obj, list) => {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        const result = util.isDeepStrictEqual(list[i], obj);
+        if (result) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 module.exports = {
-    database,
-    firestore,
-    sanitizate
+    // database,
+    // firestore,
+    // sanitizate,
+    getFirebaseData
 }
