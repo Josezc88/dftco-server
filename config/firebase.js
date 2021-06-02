@@ -233,13 +233,13 @@ const saveItemTypeS = (item) => {
     }
 
     try {
-        const serverUrl = 'http://localhost/dftco/api/v1/tipoS/create';
+        const serverUrl = 'http://dftco.com.mx/api/v1/tipoS/create';
         fetch(serverUrl, {
             method: 'POST',
             body: JSON.stringify(item),
             headers: { 
                 'Content-Type': 'application/json',
-                'Authorization': '3abdb80fd21f3bd1bbe9b6d33e2c27b7',
+                'Authorization': process.env.API_KEY,
             }
         }).then(res => res.json())
           .then(resp => {
@@ -262,13 +262,13 @@ const saveItemTypeM = (item) => {
     }
 
     try {
-        const serverUrl = 'http://localhost/dftco/api/v1/tipoM/create';
+        const serverUrl = 'http://dftco.com.mx/api/v1/tipoM/create';
         fetch(serverUrl, {
             method: 'POST',
             body: JSON.stringify(item),
             headers: { 
                 'Content-Type': 'application/json',
-                'Authorization': '3abdb80fd21f3bd1bbe9b6d33e2c27b7',
+                'Authorization': process.env.API_KEY,
             }
         }).then(res => res.json())
           .then(resp => {
@@ -289,13 +289,13 @@ const saveItemTypeR = (item) => {
     }
 
     try {
-        const serverUrl = 'http://localhost/dftco/api/v1/tipoR/create';
+        const serverUrl = 'http://dftco.com.mx/api/v1/tipoR/create';
         fetch(serverUrl, {
             method: 'POST',
             body: JSON.stringify(item),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': '3abdb80fd21f3bd1bbe9b6d33e2c27b7',
+                'Authorization': process.env.API_KEY,
             }
         }).then(res => res.json())
           .then(resp => {
@@ -316,13 +316,13 @@ const saveItemTypeE = (item) => {
     }
 
     try {
-        const serverUrl = 'http://localhost/dftco/api/v1/tipoE/create';
+        const serverUrl = 'http://dftco.com.mx/api/v1/tipoE/create';
         fetch(serverUrl, {
             method: 'POST',
             body: JSON.stringify(item),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': '3abdb80fd21f3bd1bbe9b6d33e2c27b7',
+                'Authorization': process.env.API_KEY,
             }
         }).then(res => res.json())
           .then(resp => {
