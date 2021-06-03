@@ -4,8 +4,8 @@ const util = require('util');
 const fetch = require('node-fetch');
 const moment = require('moment');
 
-const fireBaseItems = [];
-const items = [];
+let fireBaseItems = [];
+let items = [];
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
