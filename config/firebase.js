@@ -57,14 +57,20 @@ const saveToFirestore = (clientid, key, item) => {
         return;
     }
 
-    const fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
-    item.F = firebase.firestore.Timestamp.fromDate(fecha.toDate());
+    const newItem = Object.assign({}, item);
+    if (item.F)  {
+        const fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
+        newItem.F = firebase.firestore.Timestamp.fromDate(fecha.toDate());
+    } else {
+        const fecha = moment(`${item.Fecha} ${item.Hora}`, 'MM/DD/YYYY HH:mm:ss A');
+        newItem.Fecha = firebase.firestore.Timestamp.fromDate(fecha.toDate());
+    }
 
     try {
         firestore.collection(clientid)
         .doc('data')
         .collection(key)
-        .add(item)
+        .add(newItem)
         .then(resp => {
             fireBaseItems.push(item);
             console.log('Se guardo en firebase', key);
