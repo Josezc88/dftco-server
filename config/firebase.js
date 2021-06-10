@@ -44,8 +44,8 @@ const getFirebaseData = () => {
                 }
 
                 const clientId = (key === 'R1010' || key === 'E1010') ? 'Cargadero' : 'Jerez';
-                saveToDB(clientId, key, newItem);
                 saveToFirestore(clientId, key, newItem);
+                saveToDB(clientId, key, newItem);
             }
         });
     });
@@ -64,6 +64,7 @@ const saveToFirestore = (clientid, key, item) => {
         .add(item)
         .then(resp => {
             fireBaseItems.push(item);
+            console.log('Se guardo en firebase', key);
         })
         .catch(e => console.log(e));
     } catch (error) {
