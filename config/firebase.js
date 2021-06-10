@@ -60,10 +60,10 @@ const saveToFirestore = (clientid, key, item) => {
     const newItem = Object.assign({}, item);
     if (item.F)  {
         const fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
-        newItem.F = firebase.firestore.Timestamp.fromDate(fecha.toDate());
+        newItem.F2 = firebase.firestore.Timestamp.fromDate(fecha.toDate());
     } else {
         const fecha = moment(`${item.Fecha} ${item.Hora}`, 'MM/DD/YYYY HH:mm:ss A');
-        newItem.Fecha = firebase.firestore.Timestamp.fromDate(fecha.toDate());
+        newItem.Fecha2 = firebase.firestore.Timestamp.fromDate(fecha.toDate());
     }
 
     try {
