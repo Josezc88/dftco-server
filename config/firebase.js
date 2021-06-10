@@ -45,7 +45,7 @@ const getFirebaseData = () => {
 
                 const clientId = (key === 'R1010' || key === 'E1010') ? 'Cargadero' : 'Jerez';
                 saveToFirestore(clientId, key, newItem);
-                saveToDB(clientId, key, newItem);
+                // saveToDB(clientId, key, newItem);
             }
         });
     });
@@ -53,9 +53,12 @@ const getFirebaseData = () => {
 
 const saveToFirestore = (clientid, key, item) => {
     const inArray = containsObject(item, fireBaseItems);
-    if (inArray) {        
+    if (inArray) {
         return;
     }
+
+    const fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
+    item.F = firebase.firestore.Timestamp.fromDate(fecha.toDate());
     
     try {
         firestore.collection(clientid)
