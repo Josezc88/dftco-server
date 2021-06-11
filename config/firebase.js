@@ -45,7 +45,7 @@ const getFirebaseData = () => {
 
                 const clientId = (key === 'R1010' || key === 'E1010') ? 'Cargadero' : 'Jerez';
                 saveToFirestore(clientId, key, newItem);
-                saveToDB(clientId, key, newItem);
+                // saveToDB(clientId, key, newItem);
             }
         });
     });
@@ -58,13 +58,20 @@ const saveToFirestore = (clientid, key, item) => {
     }
 
     const newItem = Object.assign({}, item);
+    let fecha = null;
     if (item.F)  {
-        const fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
-        newItem.F2 = firebase.firestore.Timestamp.fromDate(fecha.toDate());
+        fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
+        newItem.F2 = (fecha.unix())*1000;
     } else {
-        const fecha = moment(`${item.Fecha} ${item.Hora}`, 'MM/DD/YYYY HH:mm:ss A');
-        newItem.Fecha2 = firebase.firestore.Timestamp.fromDate(fecha.toDate());
+        fecha = moment(`${item.Fecha} ${item.Hora}`, 'MM/DD/YYYY HH:mm:ss A');
+        newItem.Fecha2 = (fecha.unix())*1000;
     }
+
+    // console.log('ITEM F', `${item.F} ${item.H}`);
+    // console.log('Fecha', fecha);
+    // console.log('Fecha2', newItem.F2);
+    // console.log('****************');
+    // return;
 
     try {
         firestore.collection(clientid)
@@ -73,7 +80,7 @@ const saveToFirestore = (clientid, key, item) => {
         .add(newItem)
         .then(resp => {
             fireBaseItems.push(item);
-            console.log('Se guardo en firebase', key);
+            console.log('Se guardo en firebase', newItem.F2.toDate());
         })
         .catch(e => console.log(e));
     } catch (error) {
