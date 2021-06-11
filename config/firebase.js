@@ -66,7 +66,7 @@ const saveToFirestore = (clientid, key, item) => {
     }
 
     const inArray = containsObject(compare, fireBaseItems);
-    console.log('inArray', inArray);
+    // console.log('inArray', inArray);
     if (inArray) {
         return;
     }
