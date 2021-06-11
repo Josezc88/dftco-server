@@ -45,46 +45,44 @@ const getFirebaseData = () => {
 
                 const clientId = (key === 'R1010' || key === 'E1010') ? 'Cargadero' : 'Jerez';
                 saveToFirestore(clientId, key, newItem);
-                // saveToDB(clientId, key, newItem);
+                saveToDB(clientId, key, newItem);
             }
         });
     });
 }
 
 const saveToFirestore = (clientid, key, item) => {
-    const inArray = containsObject(item, fireBaseItems);
+    const compare = { id: key };
+    const newItem = Object.assign({}, item);
+    let fecha = null;
+    if (item.F) {
+        fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
+        newItem.F2 = (fecha.unix())*1000;
+        compare.date = `${item.F} ${item.H}`;
+    } else {
+        fecha = moment(`${item.Fecha} ${item.Hora}`, 'MM/DD/YYYY HH:mm:ss A');
+        newItem.Fecha2 = (fecha.unix())*1000;
+        compare.date = `${item.Fecha} ${item.Hora}`;
+    }
+
+    const inArray = containsObject(compare, fireBaseItems);
+    console.log('inArray', inArray);
     if (inArray) {
         return;
     }
 
-    const newItem = Object.assign({}, item);
-    let fecha = null;
-    if (item.F)  {
-        fecha = moment(`${item.F} ${item.H}`, 'MM/DD/YYYY HH:mm:ss A');
-        newItem.F2 = (fecha.unix())*1000;
-    } else {
-        fecha = moment(`${item.Fecha} ${item.Hora}`, 'MM/DD/YYYY HH:mm:ss A');
-        newItem.Fecha2 = (fecha.unix())*1000;
-    }
-
-    // console.log('ITEM F', `${item.F} ${item.H}`);
-    // console.log('Fecha', fecha);
-    // console.log('Fecha2', newItem.F2);
-    // console.log('****************');
-    // return;
-
     try {
         firestore.collection(clientid)
-        .doc('data')
-        .collection(key)
-        .add(newItem)
-        .then(resp => {
-            fireBaseItems.push(item);
-            console.log('Se guardo en firebase', newItem.F2.toDate());
-        })
-        .catch(e => console.log(e));
+            .doc('data')
+            .collection(key)
+            .add(newItem)
+            .then(resp => {
+                fireBaseItems.push(compare);
+                console.log('Se guardo en firebase', key);
+            })
+            .catch(e => console.log(e));
     } catch (error) {
-        console.log(e);
+        console.log(error);
     }
 }
 
@@ -114,14 +112,6 @@ const saveToDB = (clientId, key, item) => {
             };
             saveItemTypeS(dbItem);
         } else {
-            // Bateria: '500',
-            // Fecha: '03/19/2021',
-            // Flot1: '0',
-            // Flot2: '0',
-            // Hora: '11:26:23 a. m.',
-            // Nivel: '1.03',
-            // Presion: '4.48'
-
             item.Hora= item.Hora.replace('.', '');
             const dbItem = {
                 "cliente": clientId,
@@ -146,24 +136,6 @@ const saveToDB = (clientId, key, item) => {
             saveItemTypeS(dbItem);
         }
     } else if(key.startsWith('M')) {
-        // Fecha: '05/01/2021',
-        // ForzarBomba: '0',
-        // Hora: '03:33:54 a. m.',
-        // MAA4: '0.00',
-        // MAA5: '0.00',
-        // MAA6: '0.00',
-        // MFOff: '0',
-        // MFOn: '0',
-        // MSenal: '0',
-        // MVA1: '14.52',
-        // MVA2: '4.08',
-        // MVA3: '29.04',
-        // MreadNivel: '1.0',
-        // MreadPresion: '1.00',
-        // ReleBomba: '1',
-        // ReleFOff: '0',
-        // ReleFOn: '0',
-        // ReleSenal: '0'
         item.Hora= item.Hora.replace('.', '');
         const dbItem = {
             "cliente": clientId,
@@ -189,21 +161,6 @@ const saveToDB = (clientId, key, item) => {
         };
         saveItemTypeM(dbItem);
     } else if (key.startsWith('R')) {
-        // A5: "1",
-        // A6: "0",
-        // A7: "0",
-        // A8analog: "368",
-        // Bomba: "0",
-        // FOff: "0",
-        // FOn: "0",
-        // Fecha: "05/27/2021",
-        // Flotador: "1",
-        // Hora: "06:36:47 p. m.",
-        // ReleBomba: "1",
-        // ReleFOff: "0",
-        // ReleFOn: "0",
-        // ReleSeñal: "0",
-        // Señal: "0"
         item.Hora= item.Hora.replace('.', '');
         const dbItem = {
             "cliente": clientId,
@@ -226,10 +183,6 @@ const saveToDB = (clientId, key, item) => {
         };
         saveItemTypeR(dbItem);
     } else if (key.startsWith('E')) {
-        // Bateria: "1230"
-        // Fecha: "05/29/2021"
-        // Flotador: "1"
-        // Hora: "09:06:06 p. m."
         item.Hora= item.Hora.replace('.', '');
         const dbItem = {
             "cliente": clientId,
@@ -248,7 +201,7 @@ const saveItemTypeS = (item) => {
     if (inArray) {        
         return;
     }
-
+    
     try {
         const serverUrl = 'http://dftco.com.mx/api/v1/tipoS/create';
         fetch(serverUrl, {
@@ -266,7 +219,10 @@ const saveItemTypeS = (item) => {
             } else {
                 console.error('NO SE GUARDO', resp);
             }
-          });
+          })
+          .catch((e) =>{
+              console.log(e);
+          })
     } catch (error) {
         console.log('ERROR', error);
     }
