@@ -44,7 +44,7 @@ const getFirebaseData = () => {
                 }
 
                 const clientId = (key === 'R1010' || key === 'E1010') ? 'Cargadero' : 'Jerez';
-                saveToFirestore(clientId, key, newItem);
+                // saveToFirestore(clientId, key, newItem);
                 saveToDB(clientId, key, newItem);
             }
         });
