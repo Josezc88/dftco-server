@@ -95,11 +95,11 @@ const saveToDB = (clientId, key, item) => {
                 "identificador": key,
                 "fecha": moment(item.F, 'MM/DD/YYYY').format('YYYY-MM-DD'),
                 "hora": moment(item.H, 'HH:mm:ss A').format('HH:mm:ss'),
-                "bateria": item.B,
-                "nivel": item.N,
-                "presion": item.P,
-                "g1": item.G1,
-                "g2": item.G2,
+                "bateria": item.B || 0,
+                "nivel": item.N || 0,
+                "presion": item.P || 0,
+                "g1": item.G1 || 0,
+                "g2": item.G2 || 0,
                 "f1": item.Flot1 || 0,
                 "f2": item.Flot2 || 0,
                 "a": item.A || 0,
@@ -112,18 +112,18 @@ const saveToDB = (clientId, key, item) => {
             };
             saveItemTypeS(dbItem);
         } else {
-            console.log(item);
-            item.Hora= item.Hora.replace('.', '');
+            item.Hora = (item.Hora) ? item.Hora.replace('.', '') : '00:00:00';
+            item.Fecha = (item.Fecha) ? item.Hora.replace('.', '') : '00:00:00';
             const dbItem = {
                 "cliente": clientId,
                 "identificador": key,
                 "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
                 "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
-                "bateria": item.Bateria,
-                "nivel": item.Nivel,
-                "presion": item.Presion,
-                "g1": 0,
-                "g2": 0,
+                "bateria": item.Bateria || 0,
+                "nivel": item.Nivel || 0,
+                "presion": item.Presion || 0,
+                "g1": 0 || 0,
+                "g2": 0 || 0,
                 "f1": item.Flot1 || 0,
                 "f2": item.Flot2 || 0,
                 "a": item.A || 0,
