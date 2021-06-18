@@ -112,6 +112,7 @@ const saveToDB = (clientId, key, item) => {
             };
             saveItemTypeS(dbItem);
         } else {
+            console.log(item);
             item.Hora= item.Hora.replace('.', '');
             const dbItem = {
                 "cliente": clientId,
