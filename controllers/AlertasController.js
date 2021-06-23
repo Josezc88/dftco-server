@@ -36,15 +36,33 @@ const verificarAlertsTypeS = async (item) => {
             if (capacidad >= limitDown && capacidad < limitMiddle) {
                 newAlert.tipo = alerts[0].nombre;
                 newAlert.nivel = 'Baja';
-                if (alerts[0].estado) saveAlert(newAlert);
+                if (alerts[0].estado) {
+                    try {
+                        saveAlert(newAlert);
+                    } catch (error) {
+                        console.log('ERROR EN SAVE ALERT:', newAlert);
+                    }
+                }
             } else if (capacidad >= limitMiddle && capacidad < limitUp) {
                 newAlert.tipo = alerts[1].nombre;
                 newAlert.nivel = 'Media';
-                if (alerts[1].estado) saveAlert(newAlert);
+                if (alerts[1].estado) {
+                    try {
+                        saveAlert(newAlert);
+                    } catch (error) {
+                        console.log('ERROR EN SAVE ALERT:', newAlert);
+                    }
+                }
             } else if (capacidad >= limitUp) {
                 newAlert.tipo = alerts[2].nombre;
                 newAlert.nivel = 'Alta';
-                if (alerts[2].estado) saveAlert(newAlert);
+                if (alerts[2].estado) {
+                    try {
+                        saveAlert(newAlert);
+                    } catch (error) {
+                        console.log('ERROR EN SAVE ALERT:', newAlert);
+                    }
+                }
             } else {
                 // console.log('ALERTA NO CREADA', capacidad, limitDown, limitMiddle, limitUp);
             }
@@ -89,7 +107,13 @@ const verificarAlertsTypeM = async (item) => {
                         estado: 'Activa',
                         nivel: 'Alta'
                     };
-                    saveAlert(newAlert);
+                    {
+                        try {
+                            saveAlert(newAlert);
+                        } catch (error) {
+                            console.log('ERROR EN SAVE ALERT:', newAlert);
+                        }
+                    }
                 }
             }
         }
