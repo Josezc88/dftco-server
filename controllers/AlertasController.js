@@ -1,7 +1,9 @@
 const util = require('util');
 const fetch = require('node-fetch');
 const { getTanqueById, getSensorById, getPozoById } = require('./DataController');
-const { saveAlert } = require('./DBController');
+// const { pushInAlerts } = require('./DBController');
+
+let alerts = [];
 
 const getDevices = async() => {
     tanques = await getTanques();
@@ -147,6 +149,42 @@ const verificarAlertsTypeR = (item) => {
 
 const verificarAlertsTypeE = (item) => {
     console.log('PROCESSING DATA FOR TYPE E');
+}
+
+const saveAlert = (newAlert) => {
+    verifyAlertsSize();
+    const inArray = containsObject(newAlert, alerts);
+    if (inArray) {
+        return;
+    }
+
+    try {
+        const serverUrl = process.env.API_URL_ALERTS;
+        fetch(serverUrl, {
+            method: 'POST',
+            body: JSON.stringify(newAlert),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': process.env.API_KEY,
+            }
+        }).then(res => res.json())
+          .catch(error => console.log('ERROR PARSING JSON', error.message))
+          .then(resp => {
+            if (resp.ok) {
+                alerts.push(newAlert);
+                console.log('Se guardo correctamente', newAlert.tipo);
+            }
+          })
+          .catch(error => console.log('ERROR IN RESPONSE', error.message))
+    } catch (error) {
+        console.log('ERROR', error);
+    }
+}
+
+const verifyAlertsSize = () => {
+    if(alerts.length >= 1000) {
+        alerts = [];
+    }
 }
 
 const getDeviceSById = (id, type) => {

@@ -8,7 +8,7 @@ let alerts = [];
 
 const saveToDB = (clientId, key, item) => {
     verifyItemsSize()
-    verifyAlertsSize();
+    // verifyAlertsSize();
 
     if(key.startsWith('S')) {
         if (item.H) {
@@ -246,35 +246,6 @@ const sanitizate = (value) => {
     return value.toString().replace(/\"/g, "").replace(/\\/g, "");
 }
 
-const saveAlert = (newAlert) => {
-    const inArray = containsObject(newAlert, alerts);
-    if (inArray) {
-        return;
-    }
-
-    try {
-        const serverUrl = process.env.API_URL_ALERTS;
-        fetch(serverUrl, {
-            method: 'POST',
-            body: JSON.stringify(newAlert),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': process.env.API_KEY,
-            }
-        }).then(res => res.json())
-          .catch(error => console.log('ERROR PARSING JSON', error.message))
-          .then(resp => {
-            if (resp.ok) {
-                alerts.push(newAlert);
-                console.log('Se guardo correctamente', newAlert.tipo);
-            }
-          })
-          .catch(error => console.log('ERROR IN RESPONSE', error.message))
-    } catch (error) {
-        console.log('ERROR', error);
-    }
-}
-
 const containsObject = (obj, list) => {
     var i;
     for (i = 0; i < list.length; i++) {
@@ -299,8 +270,12 @@ const verifyAlertsSize = () => {
     }
 }
 
+const pushInAlerts = (alert) => {
+    alerts.push(alert);
+}
+
 module.exports = {
     saveToDB,
     sanitizate,
-    saveAlert
+    pushInAlerts
 }
