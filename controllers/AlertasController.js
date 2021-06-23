@@ -1,7 +1,7 @@
 const util = require('util');
 const fetch = require('node-fetch');
 const { getTanqueById, getSensorById, getPozoById } = require('./DataController');
-const { saveAlert } = require('./DbController');
+const { saveAlert } = require('./DBController');
 
 const getDevices = async() => {
     tanques = await getTanques();
