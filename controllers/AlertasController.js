@@ -40,7 +40,7 @@ const verificarAlertsTypeS = async (item) => {
                     try {
                         saveAlert(newAlert);
                     } catch (error) {
-                        console.log('ERROR EN SAVE ALERT:', newAlert);
+                        console.log('ERROR EN SAVE ALERT:', error);
                     }
                 }
             } else if (capacidad >= limitMiddle && capacidad < limitUp) {
@@ -50,7 +50,7 @@ const verificarAlertsTypeS = async (item) => {
                     try {
                         saveAlert(newAlert);
                     } catch (error) {
-                        console.log('ERROR EN SAVE ALERT:', newAlert);
+                        console.log('ERROR EN SAVE ALERT:', error);
                     }
                 }
             } else if (capacidad >= limitUp) {
@@ -60,7 +60,7 @@ const verificarAlertsTypeS = async (item) => {
                     try {
                         saveAlert(newAlert);
                     } catch (error) {
-                        console.log('ERROR EN SAVE ALERT:', newAlert);
+                        console.log('ERROR EN SAVE ALERT:', error);
                     }
                 }
             } else {
