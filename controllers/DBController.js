@@ -246,7 +246,7 @@ const sanitizate = (value) => {
     return value.toString().replace(/\"/g, "").replace(/\\/g, "");
 }
 
-const saveAlert = (newAlert) => {
+const saveAlert = async (newAlert) => {
     const inArray = containsObject(newAlert, alerts);
     if (inArray) {
         return;
