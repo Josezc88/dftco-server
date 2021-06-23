@@ -1,10 +1,9 @@
 const express = require('express');
 require('dotenv').config();
-const moment = require('moment');
-
 // Firebase config
-// const { database, firestore, sanitizate } = require('./config/firebase');
 const { getFirebaseData} = require('./config/firebase');
+const { getDevices } = require('./controllers/AlertasController');
+
 // SERVIDOR
 const app = express();
 
