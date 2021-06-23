@@ -181,6 +181,18 @@ const saveAlert = (newAlert) => {
     }
 }
 
+const containsObject = (obj, list) => {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        const result = util.isDeepStrictEqual(list[i], obj);
+        if (result) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 const verifyAlertsSize = () => {
     if(alerts.length >= 1000) {
         alerts = [];
