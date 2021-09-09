@@ -31,7 +31,7 @@ const saveToDB = (clientId, key, item) => {
                 "min": item.Min || 0,
                 "maxMin": item.MaxMin || '',
                 "nombre": item.Nombre || '',
-                "tipo": item.Tipo || item.tipo || ''
+                "tipo": item.Tipo || ''
             };
             saveItemTypeS(dbItem);
         } else {
@@ -141,6 +141,9 @@ const saveItemTypeS = (item) => {
         }).then(res => res.json())
           .catch(error => console.log('ERROR PARSING JSON', error.message))
           .then(resp => {
+              if (!resp) {
+                return;
+              }
             if (resp.ok) {
                 console.log('Se guardo correctamente', item.identificador);
                 items.push(item);
@@ -176,6 +179,9 @@ const saveItemTypeM = (item) => {
         }).then(res => res.json())
           .catch(error => console.log('ERROR PARSING JSON', error.message))
           .then(resp => {
+            if (!resp) {
+                return;
+            }
             if (resp.ok) {
                 console.log('Se guardo correctamente', item.identificador);
                 items.push(item);
@@ -204,6 +210,9 @@ const saveItemTypeR = (item) => {
         }).then(res => res.json())
           .catch(error => console.log('ERROR PARSING JSON', error.message))
           .then(resp => {
+            if (!resp) {
+                return;
+            }
             if (resp.ok) {
                 console.log('Se guardo correctamente', item.identificador);
                 items.push(item);
@@ -232,6 +241,9 @@ const saveItemTypeE = (item) => {
         }).then(res => res.json())
           .catch(error => console.log('ERROR PARSING JSON', error.message))
           .then(resp => {
+            if (!resp) {
+                return;
+            }
             if (resp.ok) {
                 console.log('Se guardo correctamente', item.identificador);
                 items.push(item);
