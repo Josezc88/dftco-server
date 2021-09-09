@@ -35,35 +35,44 @@ const getFirebaseData = async () => {
                     newItem[value] = sanitizate(item[value]);
                 });
 
-                let clientId = 'DFTCO';
-                let device = null;
-
-                if (key.startsWith('S') && newItem['Tipo']){
-                    const tipo = newItem['Tipo'].toLowerCase();
-                    if (tipo.includes('tanque')) {
-                        device = await getTanqueById(key);
-                    } else {
-                        device = await getSensorById(key);
-                    }
-                } else if (key.startsWith('M')) {
-                    device = await getPozoById(key);
-                } else {
-                    clientId = 'Cargadero';
-                }
-
-                if (device) {
-                    clientId = device.cliente;
-                }
-
-                console.log('clientId:', clientId);
                 if (fireBaseItems.length >= 1000) {
                     fireBaseItems = [];
                 }
+                let clientId = await getDeviceClient(key, newItem);
+                console.log('Cliente ID:', clientId);
                 saveToFirestore(clientId, key, newItem);
-                saveToDB(clientId, key, newItem);
+                // saveToDB(clientId, key, newItem);
             }
         });
     });
+}
+
+const getDeviceClient = async (key, newItem) => {
+    let device = null;
+    let clientId = 'DFTCO';
+
+    try {
+        if (key.startsWith('S') && newItem['Tipo']){
+            const tipo = newItem['Tipo'].toLowerCase();
+            if (tipo.includes('tanque')) {
+                device = await getTanqueById(key);
+            } else {
+                device = await getSensorById(key);
+            }
+        } else if (key.startsWith('M')) {
+            device = await getPozoById(key);
+        } else {
+            clientId = 'Cargadero';
+        }
+
+        if (device) {
+            clientId = device.cliente;
+        }
+        return clientId;
+    } catch (error) {
+        // console.log('ERROR', error);
+        return clientId;
+    }
 }
 
 const saveToFirestore = (clientid, key, item) => {
