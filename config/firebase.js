@@ -41,7 +41,7 @@ const getFirebaseData = async () => {
                 let clientId = await getDeviceClient(key, newItem);
                 // console.log('Cliente ID:', clientId);
                 saveToFirestore(clientId, key, newItem);
-                // saveToDB(clientId, key, newItem);
+                saveToDB(clientId, key, newItem);
             }
         });
     });
