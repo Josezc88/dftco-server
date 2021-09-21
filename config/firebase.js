@@ -38,8 +38,9 @@ const getFirebaseData = async () => {
                 if (fireBaseItems.length >= 1000) {
                     fireBaseItems = [];
                 }
-                let clientId = await getDeviceClient(key, newItem);
+                // let clientId = await getDeviceClient(key, newItem);
                 // console.log('Cliente ID:', clientId);
+                const clientId = '';
                 saveToFirestore(clientId, key, newItem);
                 saveToDB(clientId, key, newItem);
             }
