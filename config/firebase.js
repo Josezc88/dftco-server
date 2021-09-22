@@ -39,8 +39,10 @@ const getFirebaseData = async () => {
                     fireBaseItems = [];
                 }
                 let clientId = await getDeviceClient(key, newItem);
-                saveToFirestore(clientId, key, newItem);
+                // SAVE TO DB IN HOSTING
                 saveToDB(clientId, key, newItem);
+                // SABE TO FIREBASE IN FIRESTORE
+                saveToFirestore(clientId, key, newItem);
             }
         });
     });

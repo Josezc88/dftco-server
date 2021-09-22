@@ -10,7 +10,7 @@ const saveToDB = (clientId, key, item) => {
     verifyItemsSize()
     // verifyAlertsSize();
 
-    if(key.startsWith('S')) {
+    if (key.startsWith('S')) {
         if (item.H) {
             item.H = item.H.replace('.', '');
             const dbItem = {
@@ -59,101 +59,109 @@ const saveToDB = (clientId, key, item) => {
             };
             saveItemTypeS(dbItem);
         }
-    } else if(key.startsWith('M')) {
-        item.Hora= item.Hora.replace('.', '');
-        const dbItem = {
-            "cliente": clientId,
-            "identificador": key,
-            "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-            "forzarbomba": item.ForzarBomba,
-            "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
-            "maa4": item.MAA4,
-            "maa5": item.MAA5,
-            "maa6": item.MAA6,
-            "mfoff": item.MFOff,
-            "mfon": item.MFOn,
-            "msenal": item.MSenal,
-            "mva1": item.MVA1,
-            "mva2": item.MVA2,
-            "mva3": item.MVA3,
-            "mreadnivel": item.MreadNivel,
-            "mreadpresion": item.MreadPresion,
-            "relebomba": item.ReleBomba,
-            "relefoff": item.ReleFOff,
-            "relefon": item.ReleFOn,
-            "relesenal": item.ReleSenal
-        };
-        saveItemTypeM(dbItem);
-    } else if (key.startsWith('R')) {
-        item.Hora= item.Hora.replace('.', '');
-        const dbItem = {
-            "cliente": clientId,
-            "identificador": key,
-            "a5": item.A5,
-            "a6": item.A6,
-            "a7": item.A7,
-            "a8analog": item.A8analog,
-            "bomba": item.Bomba,
-            "foff": item.FOff,
-            "fon": item.FOn,
-            "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-            "flotador": item.Flotador,
-            "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
-            "relebomba": item.ReleBomba,
-            "relefoff": item.ReleFOff,
-            "relefon": item.ReleFOn,
-            "relesenal": item.ReleSeñal,
-            "senal": item.Señal
-        };
-        saveItemTypeR(dbItem);
-    } else if (key.startsWith('E')) {
-        item.Hora= item.Hora.replace('.', '');
-        const dbItem = {
-            "cliente": clientId,
-            "identificador": key,
-            "bateria": item.Bateria,
-            "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-            "flotador": item.Flotador,
-            "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss')
-        };
-        saveItemTypeE(dbItem);
+    } 
+    // else if (key.startsWith('M')) {
+    //     item.Hora = item.Hora.replace('.', '');
+    //     const dbItem = {
+    //         "cliente": clientId,
+    //         "identificador": key,
+    //         "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+    //         "forzarbomba": item.ForzarBomba,
+    //         "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
+    //         "maa4": item.MAA4,
+    //         "maa5": item.MAA5,
+    //         "maa6": item.MAA6,
+    //         "mfoff": item.MFOff,
+    //         "mfon": item.MFOn,
+    //         "msenal": item.MSenal,
+    //         "mva1": item.MVA1,
+    //         "mva2": item.MVA2,
+    //         "mva3": item.MVA3,
+    //         "mreadnivel": item.MreadNivel,
+    //         "mreadpresion": item.MreadPresion,
+    //         "relebomba": item.ReleBomba,
+    //         "relefoff": item.ReleFOff,
+    //         "relefon": item.ReleFOn,
+    //         "relesenal": item.ReleSenal
+    //     };
+    //     saveItemTypeM(dbItem);
+    // } else if (key.startsWith('R')) {
+    //     item.Hora = item.Hora.replace('.', '');
+    //     const dbItem = {
+    //         "cliente": clientId,
+    //         "identificador": key,
+    //         "a5": item.A5,
+    //         "a6": item.A6,
+    //         "a7": item.A7,
+    //         "a8analog": item.A8analog,
+    //         "bomba": item.Bomba,
+    //         "foff": item.FOff,
+    //         "fon": item.FOn,
+    //         "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+    //         "flotador": item.Flotador,
+    //         "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
+    //         "relebomba": item.ReleBomba,
+    //         "relefoff": item.ReleFOff,
+    //         "relefon": item.ReleFOn,
+    //         "relesenal": item.ReleSeñal,
+    //         "senal": item.Señal
+    //     };
+    //     saveItemTypeR(dbItem);
+    // } else if (key.startsWith('E')) {
+    //     item.Hora = item.Hora.replace('.', '');
+    //     const dbItem = {
+    //         "cliente": clientId,
+    //         "identificador": key,
+    //         "bateria": item.Bateria,
+    //         "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+    //         "flotador": item.Flotador,
+    //         "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss')
+    //     };
+    //     saveItemTypeE(dbItem);
+    // }
+}
+
+const parseJSON = (json) => {
+    try {
+        return JSON.parse(json);
+    } catch (error) {
+        return null;
     }
 }
 
 // SAVE ON TYPE S TABLE
 const saveItemTypeS = (item) => {
     const inArray = containsObject(item, items);
-    if (inArray) {        
+    if (inArray) {
         return;
     }
 
     verificarAlertsTypeS(item);
-    
+
     try {
         const serverUrl = process.env.API_URL_TYPE_S;
         fetch(serverUrl, {
             method: 'POST',
             body: JSON.stringify(item),
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': process.env.API_KEY,
             }
-        }).then(res => res.json())
-          .catch(error => console.log('ERROR PARSING JSON', error.message))
-          .then(resp => {
-              if (!resp) {
-                return;
-              }
-            if (resp.ok) {
-                console.log('Se guardo correctamente', item.identificador);
-                items.push(item);
-            } else {
-                console.error('NO SE GUARDO', resp);
-            }
-          })
-          .catch((e) =>{
-            console.log(e);
-          })
+        }).then(res => res.text())
+            .catch(error => console.log('ERROR PARSING JSON', error.message))
+            .then(resp => {
+                const response = parseJSON(resp);
+                if (!response) {
+                    return;
+                }
+                if (response.ok) {
+                    console.log('Se guardo correctamente', item.identificador);
+                    items.push(item);
+                } else {
+                    console.error('NO SE GUARDO', resp);
+                }
+            })
+            .catch(error => console.log('ERROR EN RESPONSE', error))
     } catch (error) {
         console.log('ERROR', error);
     }
@@ -161,7 +169,7 @@ const saveItemTypeS = (item) => {
 
 const saveItemTypeM = (item) => {
     const inArray = containsObject(item, items);
-    if (inArray) {        
+    if (inArray) {
         return;
     }
 
@@ -172,21 +180,24 @@ const saveItemTypeM = (item) => {
         fetch(serverUrl, {
             method: 'POST',
             body: JSON.stringify(item),
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': process.env.API_KEY,
             }
-        }).then(res => res.json())
-          .catch(error => console.log('ERROR PARSING JSON', error.message))
-          .then(resp => {
-            if (!resp) {
-                return;
-            }
-            if (resp.ok) {
-                console.log('Se guardo correctamente', item.identificador);
-                items.push(item);
-            }
-          });
+        })
+            .then(resp => {
+                const response = parseJSON(resp);
+                if (!response) {
+                    return;
+                }
+                if (response.ok) {
+                    console.log('Se guardo correctamente', item.identificador);
+                    items.push(item);
+                } else {
+                    console.error('NO SE GUARDO', resp);
+                }
+            })
+            .catch(error => console.log('ERROR EN RESPONSE', error))
     } catch (error) {
         console.log('ERROR', error);
     }
@@ -194,7 +205,7 @@ const saveItemTypeM = (item) => {
 
 const saveItemTypeR = (item) => {
     const inArray = containsObject(item, items);
-    if (inArray) {        
+    if (inArray) {
         return;
     }
 
@@ -207,17 +218,20 @@ const saveItemTypeR = (item) => {
                 'Content-Type': 'application/json',
                 'Authorization': process.env.API_KEY,
             }
-        }).then(res => res.json())
-          .catch(error => console.log('ERROR PARSING JSON', error.message))
-          .then(resp => {
-            if (!resp) {
-                return;
-            }
-            if (resp.ok) {
-                console.log('Se guardo correctamente', item.identificador);
-                items.push(item);
-            }
-          });
+        })
+            .then(resp => {
+                const response = parseJSON(resp);
+                if (!response) {
+                    return;
+                }
+                if (response.ok) {
+                    console.log('Se guardo correctamente', item.identificador);
+                    items.push(item);
+                } else {
+                    console.error('NO SE GUARDO', resp);
+                }
+            })
+            .catch(error => console.log('ERROR EN RESPONSE', error))
     } catch (error) {
         console.log('ERROR', error);
     }
@@ -225,7 +239,7 @@ const saveItemTypeR = (item) => {
 
 const saveItemTypeE = (item) => {
     const inArray = containsObject(item, items);
-    if (inArray) {        
+    if (inArray) {
         return;
     }
 
@@ -238,17 +252,20 @@ const saveItemTypeE = (item) => {
                 'Content-Type': 'application/json',
                 'Authorization': process.env.API_KEY,
             }
-        }).then(res => res.json())
-          .catch(error => console.log('ERROR PARSING JSON', error.message))
-          .then(resp => {
-            if (!resp) {
-                return;
-            }
-            if (resp.ok) {
-                console.log('Se guardo correctamente', item.identificador);
-                items.push(item);
-            }
-          });
+        })
+            .then(resp => {
+                const response = parseJSON(resp);
+                if (!response) {
+                    return;
+                }
+                if (response.ok) {
+                    console.log('Se guardo correctamente', item.identificador);
+                    items.push(item);
+                } else {
+                    console.error('NO SE GUARDO', resp);
+                }
+            })
+            .catch(error => console.log('ERROR EN RESPONSE', error))
     } catch (error) {
         console.log('ERROR', error);
     }
@@ -271,13 +288,13 @@ const containsObject = (obj, list) => {
 }
 
 const verifyItemsSize = () => {
-    if(items.length >= 1000) {
+    if (items.length >= 1000) {
         items = [];
     }
 }
 
 const verifyAlertsSize = () => {
-    if(alerts.length >= 1000) {
+    if (alerts.length >= 1000) {
         alerts = [];
     }
 }

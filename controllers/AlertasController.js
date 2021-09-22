@@ -15,6 +15,7 @@ const getDevices = async() => {
 const verificarAlertsTypeS = async (item) => {
     // console.log('PROCESSING DATA FOR TYPE S');
     let device = await getDeviceSById(item.identificador, item.tipo);
+    console.log(item.identificador, device.alertas);
     if (device) {
         if (device.alertas.length > 0) {
             let alerts = device.alertas;
@@ -151,6 +152,14 @@ const verificarAlertsTypeE = (item) => {
     console.log('PROCESSING DATA FOR TYPE E');
 }
 
+const parseJSON = (json) => {
+    try {
+        return JSON.parse(json);
+    } catch (error) {
+        return null;
+    }
+}
+
 const saveAlert = (newAlert) => {
     verifyAlertsSize();
     const inArray = containsObject(newAlert, alerts);
@@ -167,15 +176,21 @@ const saveAlert = (newAlert) => {
                 'Content-Type': 'application/json',
                 'Authorization': process.env.API_KEY,
             }
-        }).then(res => res.json())
+        }).then(res => res.text())
           .catch(error => console.log('ERROR PARSING JSON', error.message))
           .then(resp => {
-            if (resp.ok) {
+            const response = parseJSON(resp);
+
+            if (!response) {
+                return;
+            }
+
+            if (response.ok) {
                 alerts.push(newAlert);
-                console.log('Se guardo correctamente', newAlert.tipo);
+                console.log('Se guardo la alerta correctamente', newAlert.tipo);
             }
           })
-          .catch(error => console.log('ERROR IN RESPONSE', error.message))
+          .catch(error => console.log('ERROR IN ALERT RESPONSE', error.message))
     } catch (error) {
         console.log('ERROR', error);
     }
@@ -199,15 +214,16 @@ const verifyAlertsSize = () => {
     }
 }
 
-const getDeviceSById = (id, type) => {
+const getDeviceSById = async (id, type) => {
     const device = (type.toString().toLowerCase().includes('tanque'))
-        ? getTanqueById(id)
-        : getSensorById(id);
+        ? await getTanqueById(id)
+        : await getSensorById(id);
     return device;
 }
 
-const getDeviceMById = (id) => {
-    return getPozoById(id);
+const getDeviceMById = async (id) => {
+    const device = await getPozoById(id);
+    return device;
 }
 
 module.exports = {
