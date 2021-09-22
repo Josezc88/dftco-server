@@ -38,9 +38,7 @@ const getFirebaseData = async () => {
                 if (fireBaseItems.length >= 1000) {
                     fireBaseItems = [];
                 }
-                // let clientId = await getDeviceClient(key, newItem);
-                // console.log('Cliente ID:', clientId);
-                const clientId = '';
+                let clientId = await getDeviceClient(key, newItem);
                 saveToFirestore(clientId, key, newItem);
                 saveToDB(clientId, key, newItem);
             }
@@ -62,13 +60,16 @@ const getDeviceClient = async (key, newItem) => {
             }
         } else if (key.startsWith('M')) {
             device = await getPozoById(key);
-        } else {
+        } else if (key.startsWith('E') || key.startsWith('R')) {
             clientId = 'Cargadero';
+        } else {
+            clientId = 'DFTCO';
         }
 
         if (device) {
             clientId = device.cliente;
         }
+        // console.log(key, clientId);
         return clientId;
     } catch (error) {
         // console.log('ERROR', error);

@@ -1,3 +1,4 @@
+const { response } = require('express');
 const fetch = require('node-fetch');
 
 const getTanques = async() => {
@@ -51,8 +52,20 @@ const getSensores = async() => {
     });
 }
 
+const parseJSONAndGetData = (json) => {
+    // console.log('JSON:', json);
+    try {
+        const resp = JSON.parse(json);
+        // console.log('DEVICE', resp.data);
+        return resp.data;
+    } catch (error) {
+        return null;
+    }
+}
+
 const getTanqueById = async(id) => {
     const serverURL = `${process.env.API_URL_TANQUES}readById?deviceID=${id}`;
+    // console.log(serverURL);
     return new Promise((resolve, reject) => {
         fetch(serverURL, {
             method: 'GET',
@@ -61,15 +74,16 @@ const getTanqueById = async(id) => {
                 'Authorization': process.env.API_KEY,
             }
         })
-        .then(resp => resp.json())
+        .then(resp => resp.text())
         .catch(error => reject(error))
-        .then(resp => resolve(resp.data))
+        .then(resp => resolve( parseJSONAndGetData(resp) ))
         .catch(error => reject(error));
     });
 }
 
 const getPozoById = async(id) => {
     const serverURL = `${process.env.API_URL_POZOS}readById?id=${id}`;
+    // console.log(serverURL);
     return new Promise((resolve, reject) => {
         fetch(serverURL, {
             method: 'GET',
@@ -78,15 +92,17 @@ const getPozoById = async(id) => {
                 'Authorization': process.env.API_KEY,
             }
         })
-        .then(resp => resp.json())
+        .then(resp => resp.text())
         .catch(error => reject(error))
-        .then(resp => resolve(resp.data))
+        // .then(resp => resolve(resp.data))
+        .then(resp => resolve( parseJSONAndGetData(resp) ))
         .catch(error => reject(error));
     });
 }
 
 const getSensorById = async(id) => {
     const serverURL = `${process.env.API_URL_SENSORES}readById?id=${id}`;
+    // console.log(serverURL);
     return new Promise((resolve, reject) => {
         fetch(serverURL, {
             method: 'GET',
@@ -95,9 +111,10 @@ const getSensorById = async(id) => {
                 'Authorization': process.env.API_KEY,
             }
         })
-        .then(resp => resp.json())
+        .then(resp => resp.text())
         .catch(error => reject(error))
-        .then(resp => resolve(resp.data))
+        // .then(resp => resolve(resp.data))
+        .then(resp => resolve( parseJSONAndGetData(resp) ))
         .catch(error => reject(error));
     });
 }
