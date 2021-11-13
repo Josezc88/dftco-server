@@ -8,7 +8,7 @@ let alerts = [];
 
 const saveToDB = (clientId, key, item) => {
     verifyItemsSize();
-    
+
     if (key.startsWith('S')) {
         if (item.H) {
             item.H = item.H.replace('.', '');
@@ -170,7 +170,7 @@ const saveItemTypeS = (item, oldItem) => {
                     items.push(item);
                 } else {
                     console.error('NO SE GUARDO', resp);
-                    console.error(item, oldItem);
+                    // console.error(item, oldItem);
                 }
             })
             .catch(error => console.log('ERROR EN RESPONSE', error))
