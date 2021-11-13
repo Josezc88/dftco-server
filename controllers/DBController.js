@@ -7,9 +7,8 @@ let items = [];
 let alerts = [];
 
 const saveToDB = (clientId, key, item) => {
-    verifyItemsSize()
-    // verifyAlertsSize();
-
+    verifyItemsSize();
+    
     if (key.startsWith('S')) {
         if (item.H) {
             item.H = item.H.replace('.', '');
@@ -31,10 +30,12 @@ const saveToDB = (clientId, key, item) => {
                 "min": item.Min || 0,
                 "maxMin": item.MaxMin || '',
                 "nombre": item.Nombre || '',
-                "tipo": item.Tipo || ''
+                "tipo": item.Tipo || '',
+                "vn": item.Vn || 1,
+                "vp": item.Vp || 1,
             };
-            saveItemTypeS(dbItem);
-        } else {
+            saveItemTypeS(dbItem, item);
+        } else if (item.Hora) {
             item.Hora = (item.Hora) ? item.Hora.replace('.', '') : '00:00:00';
             item.Fecha = (item.Fecha) ? item.Hora.replace('.', '') : '00:00:00';
             const dbItem = {
@@ -55,70 +56,80 @@ const saveToDB = (clientId, key, item) => {
                 "min": item.Min || 0,
                 "maxMin": item.MaxMin || '',
                 "nombre": item.Nombre || '',
-                "tipo": item.Tipo || ''
+                "tipo": item.Tipo || '',
+                "vn": item.Vn || 1,
+                "vp": item.Vp || 1
             };
-            saveItemTypeS(dbItem);
+            saveItemTypeS(dbItem, item);
+        } else{
+            // console.log('NO HAY DATOS COMPLETOS', item);
         }
     } 
-    // else if (key.startsWith('M')) {
-    //     item.Hora = item.Hora.replace('.', '');
-    //     const dbItem = {
-    //         "cliente": clientId,
-    //         "identificador": key,
-    //         "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //         "forzarbomba": item.ForzarBomba,
-    //         "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
-    //         "maa4": item.MAA4,
-    //         "maa5": item.MAA5,
-    //         "maa6": item.MAA6,
-    //         "mfoff": item.MFOff,
-    //         "mfon": item.MFOn,
-    //         "msenal": item.MSenal,
-    //         "mva1": item.MVA1,
-    //         "mva2": item.MVA2,
-    //         "mva3": item.MVA3,
-    //         "mreadnivel": item.MreadNivel,
-    //         "mreadpresion": item.MreadPresion,
-    //         "relebomba": item.ReleBomba,
-    //         "relefoff": item.ReleFOff,
-    //         "relefon": item.ReleFOn,
-    //         "relesenal": item.ReleSenal
-    //     };
-    //     saveItemTypeM(dbItem);
-    // } else if (key.startsWith('R')) {
-    //     item.Hora = item.Hora.replace('.', '');
-    //     const dbItem = {
-    //         "cliente": clientId,
-    //         "identificador": key,
-    //         "a5": item.A5,
-    //         "a6": item.A6,
-    //         "a7": item.A7,
-    //         "a8analog": item.A8analog,
-    //         "bomba": item.Bomba,
-    //         "foff": item.FOff,
-    //         "fon": item.FOn,
-    //         "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //         "flotador": item.Flotador,
-    //         "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
-    //         "relebomba": item.ReleBomba,
-    //         "relefoff": item.ReleFOff,
-    //         "relefon": item.ReleFOn,
-    //         "relesenal": item.ReleSeñal,
-    //         "senal": item.Señal
-    //     };
-    //     saveItemTypeR(dbItem);
-    // } else if (key.startsWith('E')) {
-    //     item.Hora = item.Hora.replace('.', '');
-    //     const dbItem = {
-    //         "cliente": clientId,
-    //         "identificador": key,
-    //         "bateria": item.Bateria,
-    //         "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //         "flotador": item.Flotador,
-    //         "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss')
-    //     };
-    //     saveItemTypeE(dbItem);
-    // }
+    else if (key.startsWith('M')) {
+        item.Hora = item.Hora.replace('.', '');
+        const dbItem = {
+            "cliente": clientId,
+            "identificador": key,
+            "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+            "forzarbomba": item.ForzarBomba,
+            "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
+            "maa4": item.MAA4,
+            "maa5": item.MAA5,
+            "maa6": item.MAA6,
+            "mfoff": item.MFOff,
+            "mfon": item.MFOn,
+            "msenal": item.MSenal,
+            "mva1": item.MVA1,
+            "mva2": item.MVA2,
+            "mva3": item.MVA3,
+            "mreadnivel": item.MreadNivel,
+            "mreadpresion": item.MreadPresion,
+            "relebomba": item.ReleBomba,
+            "relefoff": item.ReleFOff,
+            "relefon": item.ReleFOn,
+            "relesenal": item.ReleSenal,
+            "vn": item.Vn || 1,
+            "vp": item.Vp || 1
+        };
+        saveItemTypeM(dbItem);
+    } else if (key.startsWith('R')) {
+        item.Hora = item.Hora.replace('.', '');
+        const dbItem = {
+            "cliente": clientId,
+            "identificador": key,
+            "a5": item.A5,
+            "a6": item.A6,
+            "a7": item.A7,
+            "a8analog": item.A8analog,
+            "bomba": item.Bomba,
+            "foff": item.FOff,
+            "fon": item.FOn,
+            "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+            "flotador": item.Flotador,
+            "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
+            "relebomba": item.ReleBomba,
+            "relefoff": item.ReleFOff,
+            "relefon": item.ReleFOn,
+            "relesenal": item.ReleSeñal,
+            "senal": item.Señal,
+            "vn": item.Vn || 1,
+            "vp": item.Vp || 1
+        };
+        saveItemTypeR(dbItem);
+    } else if (key.startsWith('E')) {
+        item.Hora = item.Hora.replace('.', '');
+        const dbItem = {
+            "cliente": clientId,
+            "identificador": key,
+            "bateria": item.Bateria,
+            "fecha": moment(item.Fecha, 'MM/DD/YYYY').format('YYYY-MM-DD'),
+            "flotador": item.Flotador,
+            "hora": moment(item.Hora, 'HH:mm:ss A').format('HH:mm:ss'),
+            "vn": item.Vn || 1,
+            "vp": item.Vp || 1
+        };
+        saveItemTypeE(dbItem);
+    }
 }
 
 const parseJSON = (json) => {
@@ -130,7 +141,7 @@ const parseJSON = (json) => {
 }
 
 // SAVE ON TYPE S TABLE
-const saveItemTypeS = (item) => {
+const saveItemTypeS = (item, oldItem) => {
     const inArray = containsObject(item, items);
     if (inArray) {
         return;
@@ -159,6 +170,7 @@ const saveItemTypeS = (item) => {
                     items.push(item);
                 } else {
                     console.error('NO SE GUARDO', resp);
+                    console.error(item, oldItem);
                 }
             })
             .catch(error => console.log('ERROR EN RESPONSE', error))

@@ -15,8 +15,8 @@ const getDevices = async() => {
 const verificarAlertsTypeS = async (item) => {
     // console.log('PROCESSING DATA FOR TYPE S');
     let device = await getDeviceSById(item.identificador, item.tipo);
-    console.log(item.identificador, device.alertas);
-    if (device) {
+    // console.log(item.identificador, device.alertas);
+    if (device && device.alertas) {
         if (device.alertas.length > 0) {
             let alerts = device.alertas;
             let aux = parseFloat(item.presion) - parseFloat(item.min);

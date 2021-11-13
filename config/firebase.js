@@ -26,9 +26,10 @@ console.log('Se configuro firebase');
 const getFirebaseData = async () => {    
     database.ref().on('value', (snapshot)  => {
         const data = snapshot.val();
-        // console.log('data:', data);
         Object.keys(data).forEach(async (key, index) => {
-            if (!key.endsWith(',') && (key.startsWith('S') || key.startsWith('M') || key === 'R1010' || key === 'E1010')) {
+            if (!key.endsWith(',') && 
+                !key.includes(',') &&
+                (key.startsWith('S') || key.startsWith('M') || key === 'R1010' || key === 'E1010')) {
                 const item = data[key];
                 const newItem = {};
                 Object.keys(item).forEach((value, i) => {
@@ -38,7 +39,8 @@ const getFirebaseData = async () => {
                 if (fireBaseItems.length >= 1000) {
                     fireBaseItems = [];
                 }
-                let clientId = await getDeviceClient(key, newItem);
+                // let clientId = await getDeviceClient(key, newItem);
+                let clientId = 'DFTCO';
                 // SAVE TO DB IN HOSTING
                 saveToDB(clientId, key, newItem);
                 // SABE TO FIREBASE IN FIRESTORE
